@@ -8,5 +8,4 @@ router.get("/getTransacaoById/:id", controllerTransacao.getTransacaoById);
 router.put("/updateTransacao/:id", controllerTransacao.updateTransacao);
 router.delete("/deleteTransacao/:id", controllerTransacao.deleteTransacao);
 
-
 module.exports = router;
