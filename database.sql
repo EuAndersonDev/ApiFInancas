@@ -1,27 +1,34 @@
-USE apiFinanceira;
+CREATE DATABASE apiFinances;
+USE apiFinances;
 
-CREATE TABLE usuario (
+CREATE TABLE user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    senha VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE transacao (
+CREATE TABLE account (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    descricao VARCHAR(255) NOT NULL,
-    valor DECIMAL(19,2) NOT NULL,
-    data DATE NOT NULL,
-    tipo VARCHAR(255) NOT NULL,
-    usuario_id BIGINT NOT NULL,
-    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+    balance DECIMAL(19,2) NOT NULL,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE conta (
+CREATE TABLE transaction (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    saldo DECIMAL(19,2) NOT NULL,
-    usuario_id BIGINT NOT NULL,
-    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+    description VARCHAR(255) NOT NULL,
+    amount DECIMAL(19,2) NOT NULL,
+    date DATE NOT NULL,
+    type ENUM('withdrawal', 'deposit') NOT NULL,
+    user_id BIGINT NOT NULL,
+    account_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
-INSERT INTO usuario (nome, email, senha) VALUES ('Test User', 'testuser@example.com', 'password123');
+-- Primeiro insira o usuário
+INSERT INTO user (name, email, password) VALUES ('Test User', 'testuser@example.com', 'password123');
+
+-- Depois insira a conta
+INSERT INTO account (balance, user_id) VALUES (1000.00, 1);
