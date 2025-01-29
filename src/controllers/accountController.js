@@ -22,7 +22,20 @@ const getAccountById = async (req, res) => {
     }
 };
 
+const balance = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const account = await modelAccount.balance(id);
+        return res.status(200).json(account);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Failed to get balance" });
+    }
+};
+
+
 module.exports = {
     createAccount,
-    getAccountById
+    getAccountById,
+    balance
 };

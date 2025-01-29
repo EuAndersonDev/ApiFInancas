@@ -9,9 +9,9 @@ const addTransaction = async (transaction) => {
 
     let balanceQuery;
     if (type === 'withdrawal') {
-        balanceQuery = "UPDATE accounts SET balance = balance - ? WHERE id = ?";
+        balanceQuery = "UPDATE account SET balance = balance - ? WHERE id = ?";
     } else if (type === 'deposit') {
-        balanceQuery = "UPDATE accounts SET balance = balance + ? WHERE id = ?";
+        balanceQuery = "UPDATE account SET balance = balance + ? WHERE id = ?";
     }
     if (balanceQuery) {
         await connection.execute(balanceQuery, [amount, account_id]);
@@ -45,9 +45,9 @@ const updateTransaction = async (transaction) => {
 
     let balanceQuery;
     if (type === 'withdrawal') {
-        balanceQuery = "UPDATE accounts SET balance = balance - ? WHERE id = ?";
+        balanceQuery = "UPDATE account SET balance = balance - ? WHERE id = ?";
     } else if (type === 'deposit') {
-        balanceQuery = "UPDATE accounts SET balance = balance + ? WHERE id = ?";
+        balanceQuery = "UPDATE account SET balance = balance + ? WHERE id = ?";
     }
     if (balanceQuery) {
         await connection.execute(balanceQuery, [amount, account_id]);

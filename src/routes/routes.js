@@ -14,5 +14,6 @@ router.post("/addUser", userController.createUser);
 
 router.post("/addAccount", accountController.createAccount);
 router.get("/getAccountById/:id", accountController.getAccountById);
+router.get("/balance/:id", accountController.balance);
 
 module.exports = router;
