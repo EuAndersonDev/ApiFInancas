@@ -1,5 +1,4 @@
 const modelAccount = require('../models/accountModel');
-
 const createAccount = async (req, res) => {
     const { balance, user_id } = req.body;
     try {
@@ -10,7 +9,6 @@ const createAccount = async (req, res) => {
         return res.status(500).json({ error: "Failed to create account" });
     }
 };
-
 const getAccountById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -21,7 +19,6 @@ const getAccountById = async (req, res) => {
         return res.status(500).json({ error: "Failed to get account" });
     }
 };
-
 const balance = async (req, res) => {
     const { id } = req.params;
     try {
@@ -32,8 +29,6 @@ const balance = async (req, res) => {
         return res.status(500).json({ error: "Failed to get balance" });
     }
 };
-
-
 module.exports = {
     createAccount,
     getAccountById,
