@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "api-financas",
   "version": "1.0.0",
   "description": "A **API Finanças** é um sistema desenvolvido em **Node.js** com **MySQL** para gestão de transações financeiras. Ela permite adicionar, listar, atualizar e excluir transações, além de consultar o saldo atual.",
@@ -29,4 +30,17 @@
     "vite": "^3.0.0"
   },
   "private": true
+=======
+  "name": "apifinancas",
+  "version": "1.0.0",
+  "description": "Json Geral",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "currently nodemon ./server.js",
+
+  },
+  "author": "",
+  "license": "ISC"
+>>>>>>> a24252d3887a0bc2005c2463dc92e62fba826a3f
 }
