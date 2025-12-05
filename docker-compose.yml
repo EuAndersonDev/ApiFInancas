@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: apifinancas-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: minha_senha
+      MYSQL_DATABASE: apiFinances
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pminha_senha"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Node.js Application
+  app:
+    build: .
+    container_name: apifinancas-app
+    restart: unless-stopped
+    ports:
+      - "3333:3333"
+    environment:
+      PORT: 3333
+      HOST: mysql
+      DB_USER: root
+      DB_PASS: minha_senha
+      DB_DATABASE: apiFinances
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./server.js:/app/server.js
+      - ./app.js:/app/app.js
+
+volumes:
+  mysql_data:

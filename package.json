@@ -1,35 +1,24 @@
 {
-  "name": "api-financas",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "A **API Finanças** é um sistema desenvolvido em **Node.js** com **MySQL** para gestão de transações financeiras. Ela permite adicionar, listar, atualizar e excluir transações, além de consultar o saldo atual.",
-  "homepage": "https://github.com/EuAndersonDev/ApiFInancas#readme",
-  "bugs": {
-    "url": "https://github.com/EuAndersonDev/ApiFInancas/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EuAndersonDev/ApiFInancas.git"
-  },
+  "description": "Api Financeira",
   "license": "ISC",
-  "author": "",
+  "author": "Anderson Reis",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd ./frontend && npm run dev\"",
-    "install:all": "concurrently \"cd ./backend && npm install\" \"cd ./frontend && npm install\""
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
-    "npm-run-all": "^4.1.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^7.2.0",
-    "rimraf": "^3.0.2",
-    "styled-components": "^6.1.15",
-    "sweetalert2": "^11.17.2"
+    "cors": "^2.8.5",
+    "currently": "^0.0.8",
+    "dotenv": "^16.4.7",
+    "express": "^4.17.1",
+    "mysql2": "^3.12.0"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0",
-    "vite": "^3.0.0"
+    "nodemon": "^2.0.7"
   },
   "private": true
 }
