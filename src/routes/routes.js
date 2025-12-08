@@ -3,18 +3,24 @@ const router = express.Router();
 const transactionController = require("../controllers/transactionController");
 const userController = require("../controllers/userController");
 const accountController = require("../controllers/accountController");
+const authController = require("../controllers/authController");
+const authMiddleware = require("../middlewares/authMiddleware");
 
-router.post("/addTransaction", transactionController.addTransaction);
-router.get("/getAllTransactions", transactionController.getAllTransactions);
-router.get("/getTransactionById/:id", transactionController.getTransactionById);
-router.put("/updateTransaction/:id", transactionController.updateTransaction);
-router.delete("/deleteTransaction/:id", transactionController.deleteTransaction);
+// Public routes
+router.post("/register", userController.createUser);
+router.post("/login", authController.login);
 
-router.post("/addUser", userController.createUser);
-router.get("/getAllUsers", userController.getAllUsers);
+// Protected routes
+router.post("/addTransaction", authMiddleware, transactionController.addTransaction);
+router.get("/getAllTransactions", authMiddleware, transactionController.getAllTransactions);
+router.get("/getTransactionById/:id", authMiddleware, transactionController.getTransactionById);
+router.put("/updateTransaction/:id", authMiddleware, transactionController.updateTransaction);
+router.delete("/deleteTransaction/:id", authMiddleware, transactionController.deleteTransaction);
 
-router.post("/addAccount", accountController.createAccount);
-router.get("/getAccountById/:id", accountController.getAccountById);
-router.get("/balance/:id", accountController.balance);
+router.get("/getAllUsers", authMiddleware, userController.getAllUsers);
+
+router.post("/addAccount", authMiddleware, accountController.createAccount);
+router.get("/getAccountById/:id", authMiddleware, accountController.getAccountById);
+router.get("/balance/:id", authMiddleware, accountController.balance);
 
 module.exports = router;
