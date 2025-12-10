@@ -1,4 +1,9 @@
-const authModel = require('../models/authModel');
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.JWT_SECRET || 'your_secret_key';
+const tokenExpiry = process.env.TOKEN_EXPIRY || '1h';
 
 const login = async (req, res) => {
     try {
@@ -8,19 +13,19 @@ const login = async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
         
-        const user = await authModel.findUserByEmail(email);
+        const user = await User.findOne({ where: { email } });
         
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         
-        const passwordMatch = await authModel.validatePassword(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
         
         if (!passwordMatch) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         
-        const token = authModel.generateToken(user.id);
+        const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: tokenExpiry });
         res.json({ token });
     } catch (error) {
         console.error('Login error:', error);

@@ -5,6 +5,8 @@ const userController = require("../controllers/userController");
 const accountController = require("../controllers/accountController");
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const categoryController = require("../controllers/categoryController");
+
 
 // Public routes
 router.post("/register", userController.createUser);
@@ -22,5 +24,11 @@ router.get("/getAllUsers", authMiddleware, userController.getAllUsers);
 router.post("/addAccount", authMiddleware, accountController.createAccount);
 router.get("/getAccountById/:id", authMiddleware, accountController.getAccountById);
 router.get("/balance/:id", authMiddleware, accountController.balance);
+
+router.post("/addCategory", authMiddleware, categoryController.createCategory);
+router.get("/getAllCategories", authMiddleware, categoryController.getAllCategories);
+router.get("/getCategoryByName", authMiddleware, categoryController.getCategoryByName);
+
+router.get("/transactionsByCategory/:category_id", authMiddleware, transactionController.transactionByCategory);
 
 module.exports = router;
