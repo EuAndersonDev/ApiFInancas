@@ -174,29 +174,33 @@ ApiFInancas/
 - npm ou yarn
 - Docker e Docker Compose (opcional)
 
-### Instalação Local
+### Opção 1: Instalação Convencional (Local)
 
-1. **Clone o repositório**
+Esta opção requer que você tenha o Node.js e MySQL instalados em sua máquina.
+
+#### Passo 1: Clone o repositório
 ```bash
 git clone https://github.com/EuAndersonDev/ApiFInancas.git
 cd ApiFInancas
 ```
 
-2. **Instale as dependências**
+#### Passo 2: Instale as dependências
 ```bash
 npm install
 ```
 
-3. **Configure o banco de dados**
+#### Passo 3: Configure o banco de dados MySQL
 
-Crie um banco de dados MySQL:
+Certifique-se de que o MySQL está rodando em sua máquina e crie o banco de dados:
+
 ```sql
 CREATE DATABASE financas_db;
 ```
 
-4. **Configure as variáveis de ambiente**
+#### Passo 4: Configure as variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto com as seguintes configurações:
+
 ```env
 # Servidor
 PORT=3000
@@ -210,22 +214,104 @@ DB_NAME=financas_db
 DB_PORT=3306
 
 # JWT
-JWT_SECRET=sua_chave_secreta_aqui
+JWT_SECRET=sua_chave_secreta_forte_aqui
 TOKEN_EXPIRY=1h
 ```
 
-5. **Execute as migrations** (O Sequelize criará as tabelas automaticamente)
+> **⚠️ Importante:** 
+> - Substitua `sua_senha` pela senha do seu MySQL
+> - Gere uma chave secreta forte para o `JWT_SECRET`
 
-6. **Inicie o servidor**
+#### Passo 5: Inicie o servidor
+
+O Sequelize criará as tabelas automaticamente na primeira execução.
+
 ```bash
-# Desenvolvimento (com auto-reload)
+# Modo desenvolvimento (com auto-reload usando Nodemon)
 npm run dev
 
-# Produção
+# Modo produção
 npm start
 ```
 
-O servidor estará disponível em `http://localhost:3333`
+✅ **Pronto!** O servidor estará disponível em `http://localhost:3000`
+
+---
+
+### Opção 2: Instalação com Docker (Recomendado) 🐳
+
+Esta é a forma **mais rápida e fácil** de rodar o projeto! O Docker irá configurar automaticamente a aplicação e o banco de dados MySQL.
+
+#### Pré-requisitos
+- Docker
+- Docker Compose
+
+#### Passo 1: Clone o repositório
+```bash
+git clone https://github.com/EuAndersonDev/ApiFInancas.git
+cd ApiFInancas
+```
+
+#### Passo 2: Execute o Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+> **Nota:** Na primeira execução, o Docker irá:
+> - Baixar as imagens necessárias (Node.js e MySQL)
+> - Instalar todas as dependências
+> - Criar o banco de dados
+> - Executar o script de inicialização (`init.sql`)
+> - Iniciar a aplicação
+
+#### Comandos Úteis do Docker
+
+```bash
+# Iniciar em modo background (detached)
+docker-compose up -d --build
+
+# Ver logs em tempo real
+docker-compose logs -f
+
+# Ver logs apenas da aplicação
+docker-compose logs -f app
+
+# Parar os containers
+docker-compose down
+
+# Parar e remover volumes (limpa o banco de dados)
+docker-compose down -v
+
+# Reiniciar apenas a aplicação
+docker-compose restart app
+
+# Acessar o terminal do container
+docker-compose exec app sh
+```
+
+#### Portas Utilizadas
+
+| Serviço | Porta Host | Porta Container |
+|---------|-----------|-----------------|
+| **API** | 3000 | 3000 |
+| **MySQL** | 3307 | 3306 |
+
+✅ **Pronto!** A aplicação estará disponível em `http://localhost:3000`
+
+> **💡 Dica:** Com Docker você não precisa configurar variáveis de ambiente manualmente, tudo já está configurado no `docker-compose.yml`!
+
+#### Acessando o Banco de Dados
+
+Se precisar conectar ao MySQL via cliente externo (MySQL Workbench, DBeaver, etc.):
+
+```
+Host: localhost
+Port: 3307
+User: root
+Password: root
+Database: financas_db
+```
 
 ## ⚙️ Configuração
 
