@@ -28,7 +28,10 @@ router.get("/balance/:id", authMiddleware, accountController.balance);
 router.post("/addCategory", authMiddleware, categoryController.createCategory);
 router.get("/getAllCategories", authMiddleware, categoryController.getAllCategories);
 router.get("/getCategoryByName", authMiddleware, categoryController.getCategoryByName);
+router.get("/categorySpendingRanking", authMiddleware, categoryController.getCategorySpendingRanking);
 
 router.get("/transactionsByCategory/:category_id", authMiddleware, transactionController.transactionByCategory);
+router.get("/transactionsByPeriod", authMiddleware, transactionController.transactionByTime);
+router.get("/transactionsByType", authMiddleware, transactionController.transactionByType);
 
 module.exports = router;

@@ -3,14 +3,14 @@ const User = require('../models/User');
 
 const createAccount = async (req, res) => {
     try {
-        const { balance, user_id } = req.body;
-        
+        const { balance , user_id } = req.body;
+
         const userExists = await User.findByPk(user_id);
         if (!userExists) {
             return res.status(404).json({ error: 'User not found' });
         }
         
-        const account = await Account.create({ balance, user_id });
+        const account = await Account.create({balance, user_id });
         return res.status(201).json(account);
     } catch (error) {
         console.error(error);

@@ -2,6 +2,7 @@ const Transaction = require('../models/Transaction');
 const Account = require('../models/Account');
 const User = require('../models/User');
 const Category = require('../models/Category');
+const { Op } = require('sequelize');
 
 const addTransaction = async (req, res) => {
     try {
@@ -171,6 +172,106 @@ const transactionByCategory = async (req, res) => {
     }
 };
 
+const transactionByTime = async (req, res) => {
+    try {
+        const { startDate, endDate, user_id } = req.body;
+
+        // Validações
+        if (!startDate || !endDate) {
+            return res.status(400).json({ error: 'startDate and endDate are required' });
+        }
+
+        // Converter as datas para o formato correto
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        // Ajustar a data final para incluir todo o dia
+        end.setHours(23, 59, 59, 999);
+
+        // Validar datas
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
+        }
+
+        if (start > end) {
+            return res.status(400).json({ error: 'startDate must be before endDate' });
+        }
+
+        // Construir filtro
+        const whereClause = {
+            date: {
+                [Op.between]: [start, end]
+            }
+        };
+
+        // Se user_id foi fornecido, adicionar ao filtro
+        if (user_id) {
+            whereClause.user_id = user_id;
+        }
+
+        const transactions = await Transaction.findAll({
+            where: whereClause,
+            include: [
+                { model: User, attributes: ['id', 'name', 'email'] },
+                { model: Account, attributes: ['id', 'balance'] },
+                { model: Category, attributes: ['id', 'name'] }
+            ],
+            order: [['date', 'DESC']]
+        });
+
+        return res.status(200).json({
+            period: {
+                startDate: start.toISOString().split('T')[0],
+                endDate: end.toISOString().split('T')[0]
+            },
+            count: transactions.length,
+            transactions
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Failed to get transactions by period of time' });
+    }
+};
+
+const transactionByType = async (req, res) => {
+    try {
+        const { type, user_id } = req.body;
+
+        if (!type) {
+            return res.status(400).json({ error: 'type parameter is required (deposit or withdrawal)' });
+        }
+
+        if (!['deposit', 'withdrawal'].includes(type)) {
+            return res.status(400).json({ error: 'Invalid type. Must be "deposit" or "withdrawal"' });
+        }
+
+        const whereClause = { type };
+
+        if (user_id) {
+            whereClause.user_id = user_id;
+        }
+
+        const transactions = await Transaction.findAll({
+            where: whereClause,
+            include: [
+                { model: User, attributes: ['id', 'name', 'email'] },
+                { model: Account, attributes: ['id', 'balance'] },
+                { model: Category, attributes: ['id', 'name'] }
+            ],
+            order: [['date', 'DESC']]
+        });
+
+        return res.status(200).json({
+            type: type,
+            count: transactions.length,
+            transactions
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Failed to get transactions by type' });
+    }
+};
+
 
 
 
@@ -181,5 +282,6 @@ module.exports = {
     updateTransaction,
     deleteTransaction,
     transactionByCategory,
-
+    transactionByTime,
+    transactionByType
 };
